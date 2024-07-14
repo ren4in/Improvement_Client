@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -118,8 +120,14 @@ namespace Improvement_Client
                 switch (Api.role)// определение роли при авторизации. Временно просто выводит название роли, потом будет направлять на соответсвующую страницу
                 {
                     case ("Администратор"):
-                        MessageBox.Show("Администратор");
-                  
+                                
+                      ReportsForm form =  new ReportsForm();
+ 
+                        form.Show();
+                      this.Hide();
+                       form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
+
                         break;
                     case ("Пользователь"):
                         MessageBox.Show("Пользователь");
