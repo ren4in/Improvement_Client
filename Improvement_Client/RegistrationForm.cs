@@ -56,13 +56,13 @@ namespace Improvement_Client
                 errors.AppendLine("Введите номер телефона!");
             if (string.IsNullOrWhiteSpace(textBoxPassword.Text) && _currentuser.id_User == null)
                 errors.AppendLine("Введите пароль!");
-          //  if (Check.CheckEmail(textBoxEmail.Text) == false)
-            //    errors.AppendLine("Адрес электронной почты не соответствует формату!");
+            if (Check.CheckEmail(textBoxEmail.Text) == false)
+                errors.AppendLine("Адрес электронной почты не соответствует формату!");
             if (Check.CheckPhone(textBoxPhoneNumber.Text) == false)
                 errors.AppendLine("Номер телефона не соответствует формату!");
             if(!string.IsNullOrWhiteSpace(textBoxPassword.Text))
-            //if (Check.CheckPassword(textBoxPassword.Text) == false && _currentuser.id_User==null )
-            //    errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра. Максильная длина пароля - 15 символов. ");
+            if (Check.CheckPassword(textBoxPassword.Text) == false && _currentuser.id_User==null )
+                errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра. Максильная длина пароля - 15 символов. ");
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString(), "Внимание");
