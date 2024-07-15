@@ -62,7 +62,7 @@ namespace Improvement_Client
                 errors.AppendLine("Номер телефона не соответствует формату!");
             if(!string.IsNullOrWhiteSpace(textBoxPassword.Text))
             if (Check.CheckPassword(textBoxPassword.Text) == false && _currentuser.id_User==null )
-                errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра. Максильная длина пароля - 15 символов. ");
+                errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра.  ");
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString(), "Внимание");
