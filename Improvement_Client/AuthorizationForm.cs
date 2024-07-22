@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Improvement_Client
 {
     public partial class AuthorizationForm : Form
@@ -130,7 +131,13 @@ namespace Improvement_Client
 
                         break;
                     case ("Пользователь"):
-                        MessageBox.Show("Пользователь");
+                        Map form2 = new Map();
+
+                        form2.Show();
+                        this.Hide();
+                        form2.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
+
                         break;
                  
                 }

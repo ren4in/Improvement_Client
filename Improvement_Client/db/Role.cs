@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Improvement_API.db
+namespace  Improvement_Client
+
 {
     public class Role
     {

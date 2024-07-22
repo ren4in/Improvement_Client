@@ -1,4 +1,4 @@
-﻿using Improvement_API.db;
+﻿
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net;
@@ -64,7 +64,7 @@ namespace Improvement_Client
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var tokenResponse = JsonConvert.DeserializeObject<dynamic>(responseContent);
 #pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
-                userId = tokenResponse.idUser;
+                userId = tokenResponse.id_User;
 #pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
 
                 string token = tokenResponse.access_token;

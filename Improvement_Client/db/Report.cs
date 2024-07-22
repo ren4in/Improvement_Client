@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text.Json.Serialization;
 
-namespace Improvement_API.db
+namespace Improvement_Client
 {
     public class Report
     {

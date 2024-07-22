@@ -1,11 +1,16 @@
-﻿    using System.ComponentModel.DataAnnotations;
-    using System.Data;
-    using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
+using Improvement_Client.db;
+using Point = Improvement_Client.db.Point;
+namespace Improvement_Client
+{
 
-    namespace Improvement_API.db
-    {
-
-        public partial class User
+    public partial class User
         {
             [Key]
           //  [JsonIgnore]
@@ -25,9 +30,10 @@
             public string? Password { get; set; } = null!;
             [JsonIgnore]
             public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+            public virtual ICollection<Point> Points { get; set; } = new List<Point>();
 
-            
-            public virtual Role? id_RoleNavigation { get; set; } = null!;
+
+        public virtual Role? id_RoleNavigation { get; set; } = null!;
 
 
 
