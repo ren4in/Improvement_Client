@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Improvement_Client
 {
-    
+
 
     public partial class RegistrationForm : Form
     {
@@ -19,8 +19,8 @@ namespace Improvement_Client
             if (_selectedUser != null)
             {
                 _currentuser = _selectedUser;
-              textBoxFirstName.Text= _currentuser.FirstName;
-              textBoxLastName.Text= _currentuser.LastName;
+                textBoxFirstName.Text = _currentuser.FirstName;
+                textBoxLastName.Text = _currentuser.LastName;
                 textBoxMiddleName.Text = _currentuser.MiddleName;
                 textBoxPhoneNumber.Text = _currentuser.Phone;
                 textBoxEmail.Text = _currentuser.Login;
@@ -30,11 +30,11 @@ namespace Improvement_Client
                     checkBoxAdminRights.Checked = false;
 
             }
-            
 
-            }
 
-            private void RegistrationForm_Resize(object sender, EventArgs e)
+        }
+
+        private void RegistrationForm_Resize(object sender, EventArgs e)
         {
             AdjustLayout();
         }
@@ -59,9 +59,9 @@ namespace Improvement_Client
                 errors.AppendLine("Адрес электронной почты не соответствует формату!");
             if (Check.CheckPhone(textBoxPhoneNumber.Text) == false)
                 errors.AppendLine("Номер телефона не соответствует формату!");
-            if(!string.IsNullOrWhiteSpace(textBoxPassword.Text))
-            if (Check.CheckPassword(textBoxPassword.Text) == false && _currentuser.id_User==null )
-                errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра.  ");
+            if (!string.IsNullOrWhiteSpace(textBoxPassword.Text))
+                if (Check.CheckPassword(textBoxPassword.Text) == false && _currentuser.id_User == null)
+                    errors.AppendLine("Пароль должен состоять минимум из 8 латинских букв и цифр, из них как минимум одна прописная и одна строчная буква и одна цифра.  ");
             if (errors.Length > 0)
             {
                 MessageBox.Show(errors.ToString(), "Внимание");
@@ -71,14 +71,14 @@ namespace Improvement_Client
             }
             else
             {
-                
+
                 _currentuser.FirstName = textBoxFirstName.Text;
                 _currentuser.MiddleName = textBoxMiddleName.Text;
                 _currentuser.LastName = textBoxLastName.Text;
                 _currentuser.Phone = textBoxPhoneNumber.Text;
                 _currentuser.Login = textBoxEmail.Text;
-                if (!string.IsNullOrWhiteSpace(textBoxPassword.Text)) 
-                _currentuser.Password = textBoxPassword.Text;
+                if (!string.IsNullOrWhiteSpace(textBoxPassword.Text))
+                    _currentuser.Password = textBoxPassword.Text;
                 if (checkBoxAdminRights.Checked)
                     _currentuser.id_Role = 1;
                 else
@@ -88,7 +88,7 @@ namespace Improvement_Client
                 HttpResponseMessage response;
                 if (_currentuser.id_User == null)
                 {
-                     response = await Api.client.PostAsync(Api.APP_PATH + "/api/users", content);
+                    response = await Api.client.PostAsync(Api.APP_PATH + "/api/users", content);
                     if (response.IsSuccessStatusCode)
                     {
                         MessageBox.Show("Пользователь успешно добавлен");
@@ -98,7 +98,7 @@ namespace Improvement_Client
                         this.Hide();
                         form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
                     }
-                   
+
                 }
                 else
                 {
@@ -125,11 +125,11 @@ namespace Improvement_Client
 
 
 
-                    
 
 
-                
-           
+
+
+
         private void AdjustLayout()
         {
             int formWidth = this.ClientSize.Width;
@@ -174,6 +174,11 @@ namespace Improvement_Client
             textBox.Font = new System.Drawing.Font("Segoe UI", controlHeight / 3);
 
             currentY += controlHeight + spacing;
+        }
+
+        private void RegistrationForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

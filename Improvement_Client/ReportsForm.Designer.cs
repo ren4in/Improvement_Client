@@ -41,7 +41,7 @@
             // 
             // usersToolStripMenuItem
             // 
-            this.usersToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 16F); // Увеличение размера шрифта
+            this.usersToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 14F); // Увеличение размера шрифта
             this.usersToolStripMenuItem.ForeColor = System.Drawing.Color.White; // Цвет текста
             this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
             this.usersToolStripMenuItem.Size = new System.Drawing.Size(180, 36); // Размер кнопки
@@ -50,7 +50,7 @@
             // 
             // registrationToolStripMenuItem
 
-            this.registrationToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 16F); // Увеличение размера шрифта
+            this.registrationToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 14F); // Увеличение размера шрифта
             this.registrationToolStripMenuItem.ForeColor = System.Drawing.Color.White; // Цвет текста
             this.registrationToolStripMenuItem.Name = "registrationToolStripMenuItem";
             this.registrationToolStripMenuItem.Size = new System.Drawing.Size(180, 36); // Размер кнопки
@@ -71,8 +71,8 @@
             this.DataGridReports.BackgroundColor = System.Drawing.Color.White; // Цвет фона DataGridView
             this.DataGridReports.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
             this.DataGridReports.DefaultCellStyle.BackColor = System.Drawing.Color.Yellow; // Цвет ячеек
-            this.DataGridReports.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 14F); // Увеличение размера шрифта в ячейках
-            this.DataGridReports.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold); // Увеличение размера шрифта в заголовках столбцов
+            this.DataGridReports.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12F); // Увеличение размера шрифта в ячейках
+            this.DataGridReports.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold); // Увеличение размера шрифта в заголовках столбцов
             this.DataGridReports.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                 new System.Windows.Forms.DataGridViewButtonColumn(),
                 new System.Windows.Forms.DataGridViewButtonColumn()

@@ -131,7 +131,7 @@ namespace Improvement_Client
 
                         break;
                     case ("Пользователь"):
-                        Map form2 = new Map();
+                        EmployeeChoiceForm form2 = new EmployeeChoiceForm();
 
                         form2.Show();
                         this.Hide();
