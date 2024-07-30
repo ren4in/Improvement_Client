@@ -20,6 +20,8 @@ namespace Improvement_Client
 
         public virtual Order? id_OrderNavigation { get; set; } = null!;
 
+        [JsonIgnore]
+        public virtual ICollection<Report_Image> Images { get; set; } = new List<Report_Image>();
 
 
     }

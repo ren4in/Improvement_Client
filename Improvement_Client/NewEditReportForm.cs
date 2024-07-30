@@ -45,19 +45,12 @@ namespace Improvement_Client
             }
 
         }
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            ReportsForm form = new ReportsForm();
-
-            form.Show();
-            this.Hide();
-            form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
-        }
+       
 
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            EmployeeReportsForm form = new EmployeeReportsForm();
+            EmployeeReportsForm form = new EmployeeReportsForm(_currentOrder);
 
             form.Show();
             this.Hide();
@@ -85,12 +78,27 @@ namespace Improvement_Client
                 response = await Api.client.PostAsync(Api.APP_PATH + "/api/reports", content);
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Отчет успешно добавлен");
-                    EmployeeReportsForm form = new EmployeeReportsForm(_currentOrder);
+                    Form form;
+                    DialogResult result = MessageBox.Show("Добавить фотографии?", "Удаление пользователя", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
+                    // Проверяем выбранный пользователем ответ
+                    if (result == DialogResult.Yes)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        var createdReport = JsonConvert.DeserializeObject<Report>(responseContent);
+
+
+                        form = new EmployeeReportImagesDataGridForm(createdReport);
+                    }
+                    else
+                    {
+                        form = new EmployeeReportsForm(_currentOrder);
+                    }
                     form.Show();
                     this.Hide();
                     form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
                 }
 
                 else
@@ -107,13 +115,27 @@ namespace Improvement_Client
 
                 response = await Api.client.PutAsync(Api.APP_PATH + "/api/reports/" + _currentReport.id_Report, content);
                 if (response.IsSuccessStatusCode)
+                    
                 {
                     MessageBox.Show("Данные успешно изменены!");
-                    EmployeeReportsForm form = new EmployeeReportsForm(_currentReport.id_OrderNavigation);
+                    //   EmployeeReportsForm  
+                    Form form;
+                    DialogResult result = MessageBox.Show("Просмотреть фотографии?", "Удаление пользователя", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    form.Show();
+                    // Проверяем выбранный пользователем ответ
+                    if (result == DialogResult.Yes)
+                    {
+
+                          form = new EmployeeReportImagesDataGridForm(_currentReport);
+                    } 
+                    else
+                    {
+                        form = new EmployeeReportsForm(_currentReport.id_OrderNavigation);
+                         }
+                        form.Show();
                     this.Hide();
                     form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
 
 
                 }

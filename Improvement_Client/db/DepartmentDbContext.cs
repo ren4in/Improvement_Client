@@ -39,8 +39,24 @@ public partial class DepartmentDbContext : DbContext
                   .HasForeignKey(d => d.id_Order)
                   .OnDelete(DeleteBehavior.Cascade)
                   .HasConstraintName("FK_Reports_Orders");
+            entity.HasMany(u => u.Images)
+                .WithOne(r => r.id_ReportNavigation)
+                .HasForeignKey(r => r.id_Report_Image)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Reports_Images");
         });
+        modelBuilder.Entity<Report_Image>(entity =>
+        {
+            entity.HasKey(e => e.id_Report_Image);
 
+
+            entity.HasOne(d => d.id_ReportNavigation)
+                  .WithMany(p => p.Images)
+                  .HasForeignKey(d => d.id_Report)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasConstraintName("FK_Reports_Images");
+
+        });
 
         modelBuilder.Entity<Line>(entity =>
         {

@@ -8,7 +8,6 @@
         private TextBox txtText;
         private Button btnApply;
         private Button btnBack;
-        private Button btnPhotos;
         private TableLayoutPanel tableLayoutPanel;
 
         protected override void Dispose(bool disposing)
@@ -26,7 +25,6 @@
             txtText = new TextBox();
             btnApply = new Button();
             btnBack = new Button();
-            btnPhotos = new Button();
             tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.SuspendLayout();
             SuspendLayout();
@@ -79,17 +77,7 @@
             btnBack.Text = "Назад";
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
-            // 
-            // btnPhotos
-            // 
-            btnPhotos.Anchor = AnchorStyles.None;
-            btnPhotos.Font = new Font("Microsoft Sans Serif", 12F);
-            btnPhotos.Location = new Point(414, 623);
-            btnPhotos.Name = "btnPhotos";
-            btnPhotos.Size = new Size(150, 62);
-            btnPhotos.TabIndex = 6;
-            btnPhotos.Text = "Фотографии";
-            btnPhotos.UseVisualStyleBackColor = true;
+           
             // 
             // tableLayoutPanel
             // 
@@ -100,7 +88,6 @@
             tableLayoutPanel.Controls.Add(txtHeader, 0, 0);
             tableLayoutPanel.Controls.Add(txtText, 0, 1);
             tableLayoutPanel.Controls.Add(btnBack, 0, 2);
-            tableLayoutPanel.Controls.Add(btnPhotos, 1, 2);
             tableLayoutPanel.Controls.Add(btnApply, 2, 2);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);

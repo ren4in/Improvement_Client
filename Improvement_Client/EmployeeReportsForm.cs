@@ -137,9 +137,9 @@ namespace Improvement_Client
 
 
             DataGridViewButtonColumn buttonColumn3 = new DataGridViewButtonColumn();
-            buttonColumn3.Name = "ViewOrderButton";
-            buttonColumn3.HeaderText = "Посмотреть";
-            buttonColumn3.Text = "Посмотреть";
+            buttonColumn3.Name = "ImagesButton";
+            buttonColumn3.HeaderText = "Посмотреть фото";
+            buttonColumn3.Text = "Посмотреть фото";
             buttonColumn3.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
 
             DataGridReports.Columns.Add(buttonColumn1);
@@ -395,7 +395,21 @@ namespace Improvement_Client
 
 
                 }
+                else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewButtonColumn && DataGridReports.Columns[e.ColumnIndex].Name == "ImagesButton")
+                {
+                    Report selectedReport = allReports[e.RowIndex];
 
+                    EmployeeReportImagesDataGridForm form = new EmployeeReportImagesDataGridForm(selectedReport);
+
+                    form.Show();
+                    this.Hide();
+                    form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
+
+
+
+
+                }
                 else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewButtonColumn && DataGridReports.Columns[e.ColumnIndex].Name == "DeleteReportButton")
                 {
                     DialogResult result = MessageBox.Show("Вы точно хотите удалить этот отчет?", "Удаление отчета", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
