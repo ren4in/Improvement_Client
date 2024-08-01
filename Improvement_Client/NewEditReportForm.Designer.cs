@@ -77,7 +77,6 @@
             btnBack.Text = "Назад";
             btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
-           
             // 
             // tableLayoutPanel
             // 

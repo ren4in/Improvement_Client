@@ -4,79 +4,95 @@ namespace Improvement_Client
 {
     partial class EmployeeReportImageForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private FlowLayoutPanel flowLayoutPanel;
-
-        private Button btnLoad;
-        private Button btnOK;
+        private PictureBox pictureBox;
+        private Button btnPrevious;
+        private Button btnNext;
+        private Button btnDelete;
         private Button btnBack;
+        private Button btnLoad;
 
         private void InitializeComponent()
         {
-            flowLayoutPanel = new FlowLayoutPanel();
-            btnLoad = new Button();
-            btnOK = new Button();
+            pictureBox = new PictureBox();
+            btnPrevious = new Button();
+            btnNext = new Button();
+            btnDelete = new Button();
             btnBack = new Button();
-
-            // Set up form
-            this.SuspendLayout();
-            this.Text = "Employee Report Images";
-            this.ClientSize = new System.Drawing.Size(800, 600);
-            this.Load += new EventHandler(this.Form_Load);
-            this.Resize += new EventHandler(this.Form_Resize);
-
-            // Set up btnLoad
-            btnLoad.Text = "Загрузить";
-            btnLoad.Click += new EventHandler(this.BtnLoad_Click);
-
-            // Set up flowLayoutPanel
-            flowLayoutPanel.AutoScroll = true;
-            flowLayoutPanel.BorderStyle = BorderStyle.FixedSingle;
-            flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel.WrapContents = false;
-
-            // Set up btnOK
-            btnOK.Text = "OK";
-            btnOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOK.Click += new EventHandler(this.BtnOK_Click);
-
-            // Set up btnBack
+            btnLoad = new Button();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            SuspendLayout();
+            // 
+            // pictureBox
+            // 
+            pictureBox.Location = new Point(0, 0);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(100, 50);
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.TabIndex = 0;
+            pictureBox.TabStop = false;
+            pictureBox.Click += pictureBox_Click_1;
+            // 
+            // btnPrevious
+            // 
+            btnPrevious.Location = new Point(0, 0);
+            btnPrevious.Name = "btnPrevious";
+            btnPrevious.Size = new Size(75, 23);
+            btnPrevious.TabIndex = 1;
+            btnPrevious.Text = "<";
+            btnPrevious.Click += BtnPrevious_Click;
+            // 
+            // btnNext
+            // 
+            btnNext.Location = new Point(0, 0);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(75, 23);
+            btnNext.TabIndex = 2;
+            btnNext.Text = ">";
+            btnNext.Click += BtnNext_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new Point(0, 0);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(75, 23);
+            btnDelete.TabIndex = 3;
+            btnDelete.Text = "Удалить";
+            btnDelete.Click += BtnDelete_Click;
+            // 
+            // btnBack
+            // 
+            btnBack.Location = new Point(0, 0);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(75, 23);
+            btnBack.TabIndex = 4;
             btnBack.Text = "Назад";
-            btnBack.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnBack.Click += new EventHandler(this.BtnBack_Click);
-
-            // Add controls to the form
-            this.Controls.Add(btnLoad);
-            this.Controls.Add(flowLayoutPanel);
-            this.Controls.Add(btnOK);
-            this.Controls.Add(btnBack);
-
-            this.ResumeLayout(false);
+            btnBack.Click += BtnBack_Click;
+            // 
+            // btnLoad
+            // 
+            btnLoad.Location = new Point(0, 0);
+            btnLoad.Name = "btnLoad";
+            btnLoad.Size = new Size(75, 23);
+            btnLoad.TabIndex = 5;
+            btnLoad.Text = "Добавить";
+            btnLoad.Click += btnLoad_Click;
+            // 
+            // EmployeeReportImageForm
+            // 
+            ClientSize = new Size(800, 600);
+            Controls.Add(pictureBox);
+            Controls.Add(btnPrevious);
+            Controls.Add(btnNext);
+            Controls.Add(btnDelete);
+            Controls.Add(btnBack);
+            Controls.Add(btnLoad);
+            Name = "EmployeeReportImageForm";
+            Text = "Employee Report Images";
+            Load += Form_Load;
+            Resize += Form_Resize;
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            ResumeLayout(false);
         }
-    }
-
-        #endregion
-    }
+    }   
+}
+     

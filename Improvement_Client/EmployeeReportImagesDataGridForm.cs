@@ -212,7 +212,11 @@ namespace Improvement_Client
                 {
                     // Implement view logic here
                     var reportImage = allReportImages[e.RowIndex];
-                    // Display image in a new form or picture box
+                    EmployeeReportImageForm form = new EmployeeReportImageForm(reportImage, allReportImages, _currentReport);
+                    form.Show();
+                    this.Hide();
+                    form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
                 }
                 else if (e.ColumnIndex == dataGridView.Columns["Delete"].Index)
                 {
@@ -224,6 +228,7 @@ namespace Improvement_Client
                         // Успешно удалено
                         //   InitializeDataGridView_Users();
                         dataGridView.Rows.RemoveAt(e.RowIndex);
+                        allReportImages.Remove(reportImage);
                         // LoadImages();
                     }
                     else

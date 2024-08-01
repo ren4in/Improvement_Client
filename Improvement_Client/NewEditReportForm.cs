@@ -28,7 +28,7 @@ namespace Improvement_Client
                 _currentReport = _selectedReport;
                 txtHeader.Text = _currentReport.Header;
                 txtText.Text = _currentReport.Text;
-
+                _currentOrder = _currentReport.id_OrderNavigation;
 
             }
 

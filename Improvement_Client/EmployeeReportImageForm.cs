@@ -1,109 +1,115 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Improvement_Client
 {
     public partial class EmployeeReportImageForm : Form
     {
-        private List<Report_Image> allReportImages = new List<Report_Image>();
-
+        private List<Report_Image> allReportImages;
+        private int currentIndex;
         private Report currentReport;
-        public EmployeeReportImageForm(Report _selectedReport)
+        public EmployeeReportImageForm(Report_Image _selectedImage, List<Report_Image> _allReportImages, Report _selectedReport)
         {
+            allReportImages = _allReportImages;
             currentReport = _selectedReport;
+            currentIndex = allReportImages.IndexOf(_selectedImage);
             InitializeComponent();
-            LoadImages();
-
+            LoadCurrentImage();
         }
-        private void LoadImages()
-        {
-            flowLayoutPanel.Controls.Clear();
 
-            foreach (var reportImage in allReportImages)
+        private void LoadCurrentImage()
+        {
+            if (currentIndex >= 0 && currentIndex < allReportImages.Count)
             {
-                var pictureBox = new PictureBox();
-                pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-                using (var ms = new MemoryStream(reportImage.Image))
+                var currentImage = allReportImages[currentIndex];
+                using (var ms = new MemoryStream(currentImage.Image))
                 {
                     pictureBox.Image = Image.FromStream(ms);
                 }
-
-                var deleteButton = new Button();
-                deleteButton.Text = "X";
-                deleteButton.BackColor = Color.Red;
-                deleteButton.ForeColor = Color.White;
-                deleteButton.Click += (s, e) => DeleteImage(reportImage);
-
-                var panel = new Panel();
-                panel.Controls.Add(pictureBox);
-                panel.Controls.Add(deleteButton);
-                panel.Dock = DockStyle.Fill;
-
-                deleteButton.Location = new Point(pictureBox.Width - deleteButton.Width, 0);
-
-                flowLayoutPanel.Controls.Add(panel);
-                panel.Margin = new Padding(10); // Adds spacing between items
-
-                panel.Resize += (s, e) =>
-                {
-                    pictureBox.Size = new Size(panel.ClientSize.Width - deleteButton.Width, panel.ClientSize.Height);
-                    deleteButton.Location = new Point(panel.ClientSize.Width - deleteButton.Width, 0);
-                };
-
             }
         }
-            
 
-
-                private void DeleteImage(Report_Image reportImage)
+        private void BtnNext_Click(object sender, EventArgs e)
         {
-            allReportImages.Remove(reportImage);
-            LoadImages();
+            currentIndex = (currentIndex + 1) % allReportImages.Count;
+            LoadCurrentImage();
         }
 
-        private void BtnLoad_Click(object sender, EventArgs e)
+        private void BtnPrevious_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            currentIndex = (currentIndex - 1 + allReportImages.Count) % allReportImages.Count;
+            LoadCurrentImage();
+        }
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+        private async void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (currentIndex >= 0 && currentIndex < allReportImages.Count)
             {
-                foreach (var fileName in openFileDialog.FileNames)
-                {
-                    var imageBytes = File.ReadAllBytes(fileName);
-                    var newImage = new Report_Image
-                    {
-                        id_Report = currentReport.id_Report, // Set the report ID accordingly
-                        RowGuid = Guid.NewGuid(),
-                        Image = imageBytes
-                    };
-                    allReportImages.Add(newImage);
-                    LayoutControls();
-                }
-                LoadImages();
-            }
-        }
+                HttpResponseMessage response = await Api.client.DeleteAsync(Api.APP_PATH + "/api/Report_Image/" + allReportImages[currentIndex].id_Report_Image);
 
-        private void BtnOK_Click(object sender, EventArgs e)
-        {
-            // Implement saving logic here
-            this.Close();
+                allReportImages.RemoveAt(currentIndex);
+                if (allReportImages.Count == 0)
+                {
+                    pictureBox.Image = null;
+                    return;
+                }
+                currentIndex = currentIndex % allReportImages.Count;
+                LoadCurrentImage();
+            }
         }
 
         private void BtnBack_Click(object sender, EventArgs e)
         {
-            // Implement back logic here
-            this.Close();
+            EmployeeReportImagesDataGridForm form = new EmployeeReportImagesDataGridForm(currentReport);
+            form.Show();
+            this.Hide();
+            form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
         }
+
+        private async void btnLoad_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = false; // Изменено на false, чтобы выбрать только одно изображение
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var fileName = openFileDialog.FileName; // Получаем только первый выбранный файл
+                var imageBytes = File.ReadAllBytes(fileName);
+                var newImage = new Report_Image
+                {
+                    id_Report_Image = null,
+                    id_Report = currentReport.id_Report, // Set the report ID accordingly
+                    RowGuid = Guid.NewGuid(),
+                    Image = imageBytes
+                };
+
+                allReportImages.Add(newImage);
+                var imageJson = JsonConvert.SerializeObject(newImage);
+                var content = new StringContent(imageJson, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await Api.client.PostAsync(Api.APP_PATH + "/api/Report_Image", content);
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка!");
+                }
+                allReportImages.Add(newImage);
+                currentIndex = allReportImages.Count - 1;
+                LoadCurrentImage();
+
+            }
+        }
+
+
 
         private void Form_Load(object sender, EventArgs e)
         {
@@ -114,36 +120,48 @@ namespace Improvement_Client
         {
             LayoutControls();
         }
-
         private void LayoutControls()
         {
             int margin = 10;
-            int buttonHeight = 40;
+            int buttonHeight = ClientSize.Height / 6; // Высота кнопок
+            int buttonWidth = ClientSize.Width / 7;  // Увеличенная ширина кнопок
+            int bottomButtonWidth = ClientSize.Width / 4; // Увеличенная ширина нижних кнопок
 
-            btnLoad.Location = new Point(margin, margin);
-            btnLoad.Size = new Size(ClientSize.Width - 2 * margin, buttonHeight);
+            btnPrevious.Location = new Point(margin, ClientSize.Height / 2 - buttonHeight / 2);
+            btnPrevious.Size = new Size(buttonWidth, buttonHeight);
 
-            flowLayoutPanel.Location = new Point(margin, btnLoad.Bottom + margin);
-            flowLayoutPanel.Size = new Size(ClientSize.Width - 2 * margin, ClientSize.Height - btnLoad.Bottom - 3 * margin - buttonHeight);
+            btnNext.Location = new Point(ClientSize.Width - buttonWidth - margin, ClientSize.Height / 2 - buttonHeight / 2);
+            btnNext.Size = new Size(buttonWidth, buttonHeight);
 
-            btnBack.Location = new Point(margin, ClientSize.Height - margin - buttonHeight);
-            btnBack.Size = new Size(100, buttonHeight);
+            int pictureBoxHeight = ClientSize.Height - 2 * buttonHeight - 3 * margin; // Увеличенное пространство для картинки
+            pictureBox.Location = new Point(btnPrevious.Right + margin, margin);
+            pictureBox.Size = new Size(ClientSize.Width - 2 * buttonWidth - 3 * margin, pictureBoxHeight);
 
-            btnOK.Location = new Point(ClientSize.Width - margin - 100, ClientSize.Height - margin - buttonHeight);
-            btnOK.Size = new Size(100, buttonHeight);
+            btnBack.Location = new Point(margin, ClientSize.Height - buttonHeight - margin);
+            btnBack.Size = new Size(bottomButtonWidth, buttonHeight);
 
-            // Adjust size of picture boxes in the flow layout panel
-            foreach (Control control in flowLayoutPanel.Controls)
-            {
-                if (control is Panel panel)
-                {
-                    var pictureBox = panel.Controls[0] as PictureBox;
-                    var deleteButton = panel.Controls[1] as Button;
-                    pictureBox.Size = new Size(panel.ClientSize.Width - deleteButton.Width, panel.ClientSize.Height);
-                    deleteButton.Location = new Point(panel.ClientSize.Width - deleteButton.Width, 0);
-                }
-            }
+            btnDelete.Location = new Point((ClientSize.Width - bottomButtonWidth) / 2, ClientSize.Height - buttonHeight - margin);
+            btnDelete.Size = new Size(bottomButtonWidth, buttonHeight);
+
+            btnLoad.Location = new Point(ClientSize.Width - bottomButtonWidth - margin, ClientSize.Height - buttonHeight - margin);
+            btnLoad.Size = new Size(bottomButtonWidth, buttonHeight);
+
+            float newFontSize = ClientSize.Width / 45f; // Увеличенный размер шрифта
+            btnPrevious.Font = new Font(btnPrevious.Font.FontFamily, newFontSize);
+            btnNext.Font = new Font(btnNext.Font.FontFamily, newFontSize);
+            btnDelete.Font = new Font(btnDelete.Font.FontFamily, newFontSize);
+            btnBack.Font = new Font(btnBack.Font.FontFamily, newFontSize);
+            btnLoad.Font = new Font(btnLoad.Font.FontFamily, newFontSize);
+        }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
-
