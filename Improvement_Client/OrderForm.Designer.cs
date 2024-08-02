@@ -20,128 +20,119 @@ namespace Improvement_Client
 
         private void InitializeComponent()
         {
-            this.txtHeader = new TextBox();
-            this.lblDeadline = new Label();
-            this.dtpDeadline = new DateTimePicker();
-            this.txtTime = new MaskedTextBox();
-            this.txtText = new TextBox();
-            this.btnApply = new Button();
-            this.btnCancel = new Button();
-            this.SuspendLayout();
-
+            txtHeader = new TextBox();
+            lblDeadline = new Label();
+            dtpDeadline = new DateTimePicker();
+            txtTime = new MaskedTextBox();
+            txtText = new TextBox();
+            btnApply = new Button();
+            btnCancel = new Button();
+            SuspendLayout();
             // 
             // txtHeader
             // 
-            this.txtHeader.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.txtHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtHeader.Location = new System.Drawing.Point(15, 19);
-            this.txtHeader.Margin = new Padding(4, 5, 4, 5);
-            this.txtHeader.Name = "txtHeader";
-            this.txtHeader.Size = new System.Drawing.Size(949, 35);
-            this.txtHeader.TabIndex = 0;
-            this.txtHeader.Text = "Заголовок";
-
+            txtHeader.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtHeader.Font = new Font("Microsoft Sans Serif", 12F);
+            txtHeader.Location = new Point(15, 19);
+            txtHeader.Margin = new Padding(4, 5, 4, 5);
+            txtHeader.Name = "txtHeader";
+            txtHeader.Size = new Size(949, 35);
+            txtHeader.TabIndex = 0;
+            txtHeader.Text = "Заголовок";
             // 
             // lblDeadline
             // 
-            this.lblDeadline.AutoSize = true;
-            this.lblDeadline.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lblDeadline.Location = new System.Drawing.Point(15, 86);
-            this.lblDeadline.Margin = new Padding(4, 0, 4, 0);
-            this.lblDeadline.Name = "lblDeadline";
-            this.lblDeadline.Size = new System.Drawing.Size(223, 29);
-            this.lblDeadline.TabIndex = 1;
-            this.lblDeadline.Text = "Срок выполнения";
-
+            lblDeadline.AutoSize = true;
+            lblDeadline.Font = new Font("Microsoft Sans Serif", 12F);
+            lblDeadline.Location = new Point(15, 86);
+            lblDeadline.Margin = new Padding(4, 0, 4, 0);
+            lblDeadline.Name = "lblDeadline";
+            lblDeadline.Size = new Size(223, 29);
+            lblDeadline.TabIndex = 1;
+            lblDeadline.Text = "Срок выполнения";
             // 
             // dtpDeadline
             // 
-            this.dtpDeadline.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.dtpDeadline.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.dtpDeadline.Location = new System.Drawing.Point(15, 130);
-            this.dtpDeadline.Margin = new Padding(4, 5, 4, 5);
-            this.dtpDeadline.Name = "dtpDeadline";
-            this.dtpDeadline.Size = new System.Drawing.Size(949, 35);
-            this.dtpDeadline.TabIndex = 2;
-            this.dtpDeadline.CustomFormat = "dd MMM yyyyг."; // Установка формата с датой
-            this.dtpDeadline.Format = DateTimePickerFormat.Custom;
-
-            //
+            dtpDeadline.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            dtpDeadline.CustomFormat = "dd MMM yyyyг.";
+            dtpDeadline.Font = new Font("Microsoft Sans Serif", 12F);
+            dtpDeadline.Format = DateTimePickerFormat.Custom;
+            dtpDeadline.Location = new Point(15, 130);
+            dtpDeadline.Margin = new Padding(4, 5, 4, 5);
+            dtpDeadline.Name = "dtpDeadline";
+            dtpDeadline.Size = new Size(949, 35);
+            dtpDeadline.TabIndex = 2;
+            dtpDeadline.ValueChanged += dtpDeadline_ValueChanged;
+            // 
             // txtTime
-            //
-            this.txtTime.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            this.txtTime.Font = new Font("Microsoft Sans Serif", 12F);
-            this.txtTime.Location = new Point(15, 180);
-            this.txtTime.Margin = new Padding(4, 5, 4, 5);
-            this.txtTime.Name = "txtTime";
-            this.txtTime.Size = new Size(949, 35);
-            this.txtTime.TabIndex = 3;
-            this.txtTime.Mask = "00:00"; // Маска для ввода времени
-            this.txtTime.ValidatingType = typeof(DateTime); // Указывает тип данных для валидации
-            this.txtTime.Text = "00:00"; // Начальное значение
-
+            // 
+            txtTime.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtTime.Font = new Font("Microsoft Sans Serif", 12F);
+            txtTime.Location = new Point(15, 180);
+            txtTime.Margin = new Padding(4, 5, 4, 5);
+            txtTime.Mask = "00:00";
+            txtTime.Name = "txtTime";
+            txtTime.Size = new Size(949, 35);
+            txtTime.TabIndex = 3;
+            txtTime.Text = "0000";
+            txtTime.ValidatingType = typeof(DateTime);
             // 
             // txtText
             // 
-            this.txtText.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            this.txtText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtText.Location = new System.Drawing.Point(15, 235);
-            this.txtText.Margin = new Padding(4, 5, 4, 5);
-            this.txtText.Multiline = true;
-            this.txtText.Name = "txtText";
-            this.txtText.ScrollBars = ScrollBars.Vertical;
-            this.txtText.Size = new System.Drawing.Size(949, 355);
-            this.txtText.TabIndex = 4;
-            this.txtText.Text = "Содержание поручения";
-
+            txtText.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtText.Font = new Font("Microsoft Sans Serif", 12F);
+            txtText.Location = new Point(15, 235);
+            txtText.Margin = new Padding(4, 5, 4, 5);
+            txtText.Multiline = true;
+            txtText.Name = "txtText";
+            txtText.ScrollBars = ScrollBars.Vertical;
+            txtText.Size = new Size(949, 355);
+            txtText.TabIndex = 4;
+            txtText.Text = "Содержание поручения";
             // 
             // btnApply
             // 
-            this.btnApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            this.btnApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.btnApply.Location = new System.Drawing.Point(840, 602);
-            this.btnApply.Margin = new Padding(4, 5, 4, 5);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(125, 62);
-            this.btnApply.TabIndex = 5;
-            this.btnApply.Text = "OK";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new EventHandler(this.btnApply_Click);
-
+            btnApply.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnApply.Font = new Font("Microsoft Sans Serif", 12F);
+            btnApply.Location = new Point(840, 602);
+            btnApply.Margin = new Padding(4, 5, 4, 5);
+            btnApply.Name = "btnApply";
+            btnApply.Size = new Size(125, 62);
+            btnApply.TabIndex = 5;
+            btnApply.Text = "OK";
+            btnApply.UseVisualStyleBackColor = true;
+            btnApply.Click += btnApply_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.btnCancel.Location = new System.Drawing.Point(15, 602);
-            this.btnCancel.Margin = new Padding(4, 5, 4, 5);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(125, 62);
-            this.btnCancel.TabIndex = 6;
-            this.btnCancel.Text = "Отмена";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new EventHandler(this.BtnCancel_Click);
-
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancel.Font = new Font("Microsoft Sans Serif", 12F);
+            btnCancel.Location = new Point(15, 602);
+            btnCancel.Margin = new Padding(4, 5, 4, 5);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(125, 62);
+            btnCancel.TabIndex = 6;
+            btnCancel.Text = "Отмена";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // OrderForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(980, 689);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnApply);
-            this.Controls.Add(this.txtText);
-            this.Controls.Add(this.txtTime);
-            this.Controls.Add(this.dtpDeadline);
-            this.Controls.Add(this.lblDeadline);
-            this.Controls.Add(this.txtHeader);
-            this.Margin = new Padding(4, 5, 4, 5);
-            this.Name = "OrderForm";
-            this.Text = "OrderForm";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(980, 689);
+            Controls.Add(btnCancel);
+            Controls.Add(btnApply);
+            Controls.Add(txtText);
+            Controls.Add(txtTime);
+            Controls.Add(dtpDeadline);
+            Controls.Add(lblDeadline);
+            Controls.Add(txtHeader);
+            Margin = new Padding(4, 5, 4, 5);
+            Name = "OrderForm";
+            Text = "OrderForm";
+            ResumeLayout(false);
+            PerformLayout();
         }
-
-   
     }
 }

@@ -23,7 +23,7 @@ namespace Improvement_Client
                 _currentOrder = _selectedOrder;
                 txtHeader.Text = _currentOrder.Header;
                 txtText.Text = _currentOrder.Text;
-               
+                dtpDeadline.Value = (DateTime)_currentOrder.Deadline;
 
             }
 
@@ -52,11 +52,27 @@ namespace Improvement_Client
         private async void btnApply_Click(object sender, EventArgs e)
         {
             _currentOrder.Header = txtHeader.Text;
-  
-            // Получение времени из MaskedTextBox
-          
 
-             _currentOrder.Text = txtText.Text;
+            // Получение времени из MaskedTextBox
+            DateTime selectedDate = dtpDeadline.Value.Date;
+
+            // Получение времени из MaskedTextBox
+            TimeSpan selectedTime;
+            if (TimeSpan.TryParse(txtTime.Text, out selectedTime))
+            {
+                // Объединение даты и времени
+                DateTime deadline = selectedDate.Add(selectedTime);
+                _currentOrder.Deadline = deadline;
+            }
+            else
+            {
+                MessageBox.Show("Неверный формат времени. Пожалуйста, введите время в формате ЧЧ:ММ.");
+                return;
+            }
+
+            
+
+            _currentOrder.Text = txtText.Text;
 
             var orderJson = JsonConvert.SerializeObject(_currentOrder);
             var content = new StringContent(orderJson, Encoding.UTF8, "application/json");
@@ -106,5 +122,9 @@ namespace Improvement_Client
 
         }
 
+        private void dtpDeadline_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

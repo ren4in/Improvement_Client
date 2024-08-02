@@ -122,7 +122,7 @@ namespace Improvement_Client
                 {
                     case ("Администратор"):
                                 
-                      ReportsForm form =  new ReportsForm();
+                      ManagerChoiceForm form =  new ManagerChoiceForm();
  
                         form.Show();
                       this.Hide();
