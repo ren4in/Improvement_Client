@@ -11,6 +11,7 @@ namespace Improvement_Client
     public partial class SummaryReportForm : Form
     {
         private PrintDocument printDocument = new PrintDocument();
+        private PrintDialog printDialog = new PrintDialog(); // Добавляем диалог печати
         private int currentRowIndex = 0;
         private int totalWidth;
         private List<int> columnWidths = new List<int>();
@@ -22,6 +23,7 @@ namespace Improvement_Client
         }
 
         private async void BtnGenerate_Click(object sender, EventArgs e)
+                
         {
             var startDate = dtpStartDate.Value.Date;
             var endDate = dtpEndDate.Value.Date;
@@ -45,7 +47,7 @@ namespace Improvement_Client
 
         private void BtnPrint_Click(object sender, EventArgs e)
         {
-            currentRowIndex = 0; // Reset the row index
+            currentRowIndex = 0; // Сброс индекса строки
             columnWidths.Clear();
             totalWidth = 0;
 
@@ -58,11 +60,13 @@ namespace Improvement_Client
                 }
             }
 
-            PrintPreviewDialog printPreviewDialog = new PrintPreviewDialog
+            // Открываем диалог выбора принтера
+            printDialog.Document = printDocument;
+
+            if (printDialog.ShowDialog() == DialogResult.OK)
             {
-                Document = printDocument
-            };
-            printPreviewDialog.ShowDialog();
+                printDocument.Print(); // Отправляем документ на печать
+            }
         }
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -79,11 +83,11 @@ namespace Improvement_Client
             int topMargin = e.MarginBounds.Top + headerHeight;
             int rightMargin = e.MarginBounds.Right;
 
-            // Draw the report title
+            // Отрисовка заголовка отчета
             string reportTitle = $"Отчет за период с {dtpStartDate.Value:dd.MM.yyyy} по {dtpEndDate.Value:dd.MM.yyyy}";
             e.Graphics.DrawString(reportTitle, new Font("Arial", 14, FontStyle.Bold), Brushes.Black, leftMargin, e.MarginBounds.Top);
 
-            // Draw the column headers
+            // Отрисовка заголовков колонок
             leftMargin = e.MarginBounds.Left;
             int columnIndex = 0;
             foreach (DataGridViewColumn column in dataGridView.Columns)
@@ -98,7 +102,7 @@ namespace Improvement_Client
                 }
             }
 
-            // Draw the rows
+            // Отрисовка строк данных
             leftMargin = e.MarginBounds.Left;
             topMargin += headerHeight;
             while (currentRowIndex < dataGridView.Rows.Count)
@@ -138,10 +142,10 @@ namespace Improvement_Client
 
         private void AdjustLayout()
         {
-            // Adjust the size and font of controls based on the form's size
-            /*     float newSize = Math.Max(12, ClientSize.Width / 50); // Adjust this factor as needed
+            // Корректировка размера и шрифта элементов управления в зависимости от размера формы
+            /*     float newSize = Math.Max(12, ClientSize.Width / 50); // При необходимости настройте этот коэффициент
 
-            // Update font sizes
+            // Обновление размеров шрифтов
             dataGridView.Font = new Font("Microsoft Sans Serif", newSize);
             dtpStartDate.Font = new Font("Microsoft Sans Serif", newSize);
             dtpEndDate.Font = new Font("Microsoft Sans Serif", newSize);

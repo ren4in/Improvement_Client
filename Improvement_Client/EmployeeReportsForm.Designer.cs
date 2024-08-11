@@ -25,6 +25,8 @@ namespace Improvement_Client
         private ToolStripMenuItem registrationToolStripMenuItem;
         private MenuStrip menuStrip1;
         private DataGridView DataGridReports;
+        private ToolStripTextBox searchTextBox;
+        private ToolStripButton searchButton;
 
         #region Windows Form Designer generated code
 
@@ -41,6 +43,8 @@ namespace Improvement_Client
                 this.menuStrip1 = new System.Windows.Forms.MenuStrip();
                 this.ordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
                 this.registrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+                searchTextBox = new ToolStripTextBox();
+                searchButton = new ToolStripButton();
                 this.DataGridReports = new System.Windows.Forms.DataGridView();
                 ((System.ComponentModel.ISupportInitialize)(this.DataGridReports)).BeginInit();
                 this.SuspendLayout();
@@ -50,7 +54,7 @@ namespace Improvement_Client
                 this.menuStrip1.BackColor = System.Drawing.Color.Blue; // Цвет меню
                 this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ordersToolStripMenuItem,
-            this.registrationToolStripMenuItem});
+            this.registrationToolStripMenuItem, searchTextBox, searchButton});
                 this.menuStrip1.Location = new System.Drawing.Point(0, 0);
                 this.menuStrip1.Name = "menuStrip1";
                 this.menuStrip1.Size = new System.Drawing.Size(1778, 40); // Высота меню
@@ -101,9 +105,28 @@ namespace Improvement_Client
                 this.DataGridReports.ReadOnly = true; // Запрет редактирования ячеек
                 this.DataGridReports.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect; // Выделение всей строки
                                                                                                                    // 
-                                                                                                                   // ReportsForm
                                                                                                                    // 
-                this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+                                                                                                                   // searchButton
+                                                                                                                   // 
+            this.searchButton.Text = "Поиск";
+            this.searchButton.BackColor = System.Drawing.Color.White;
+            this.searchButton.ForeColor = System.Drawing.Color.Black;
+            this.searchButton.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.searchButton.Alignment = ToolStripItemAlignment.Right;
+            this.searchButton.Click += new System.EventHandler(this.OnSearchButtonClick);
+
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(200, 40);
+            this.searchTextBox.Alignment = ToolStripItemAlignment.Right; // Выравниваем по правому краю
+            this.searchTextBox.Visible = false; // Изначально скрыто
+            this.searchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchTextBox_KeyDown);
+
+            // ReportsForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
                 this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 this.ClientSize = new System.Drawing.Size(1778, 904);
                 this.Controls.Add(this.DataGridReports);

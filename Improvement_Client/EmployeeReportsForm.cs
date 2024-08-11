@@ -32,11 +32,12 @@ namespace Improvement_Client
         }
         private List<Order> allOrders;
         private List<Report> allReports;
-
+        private int mode; // 2 - orders, 3 - reports
 
 
         public async void LoadReports(int? thisOrder)
         {
+            mode = 3;
             HttpResponseMessage response = await
 
                 Api.client.GetAsync(Api.APP_PATH + "/api/Reports/order/" + thisOrder);
@@ -53,6 +54,27 @@ namespace Improvement_Client
                 MessageBox.Show("Ошибка сервера!");
             }
         }
+        public async void LoadReports(int? thisOrder, string searchText)
+        {
+            mode = 3;
+            HttpResponseMessage response = await
+
+                Api.client.GetAsync(Api.APP_PATH + "/api/Reports/search?id_Order=" + thisOrder + "&searchText=" + searchText);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var reportsJson = await response.Content.ReadAsStringAsync();
+                allReports = JsonConvert.DeserializeObject<List<Report>>(reportsJson);
+                DataGridReports.DataSource = allReports;
+
+            }
+            else
+            {
+                MessageBox.Show("Ошибка сервера!");
+            }
+        }
+
+
 
         private void InitializeDataGridView_Reports()
         {
@@ -156,6 +178,7 @@ namespace Improvement_Client
         }
             public async void LoadOrders(int? thisUser)
         {
+            mode = 2;
             HttpResponseMessage response = await
 
                 Api.client.GetAsync(Api.APP_PATH + "/api/Orders/user/" + thisUser);
@@ -166,6 +189,25 @@ namespace Improvement_Client
                 allOrders = JsonConvert.DeserializeObject<List<Order>>(ordersJson);
                 DataGridReports.DataSource = allOrders
                     ;
+
+            }
+            else
+            {
+                MessageBox.Show("Ошибка сервера!");
+            }
+        }
+
+
+        public async void LoadOrders(int? thisUser, string SearchText)
+        {
+            mode = 2;
+            HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Orders/search?id_User=" + thisUser + "&searchText=" + SearchText);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var ordersJson = await response.Content.ReadAsStringAsync();
+                allOrders = JsonConvert.DeserializeObject<List<Order>>(ordersJson);
+                DataGridReports.DataSource = allOrders;
 
             }
             else
@@ -461,6 +503,47 @@ namespace Improvement_Client
             DataGridReports.Location = new Point(
                 (ClientSize.Width - DataGridReports.Width) / 2,
                 (ClientSize.Height - DataGridReports.Height) / 2);
+        }
+        private void OnSearchButtonClick(object sender, EventArgs e)
+        {
+            searchTextBox.Visible = !searchTextBox.Visible; // Показываем или скрываем текстовое поле
+            if (searchTextBox.Visible)
+            {
+                searchTextBox.Focus(); // Фокус на текстовое поле
+            }
+        }
+
+        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Логика поиска по тексту в searchTextBox.Text
+                
+                 if (mode == 2)
+                {
+                    if (searchTextBox.Text == "")
+                    {
+                        LoadOrders(Api.userId);
+                    }
+                    else
+                    {
+                        LoadOrders(Api.userId, searchTextBox.Text);
+                    }
+                }
+                else if (mode == 3)
+                {
+                    if (searchTextBox.Text == "")
+                    {
+                        LoadReports(selectedOrder.id_Order);
+                    }
+                    else
+                    {
+                        LoadReports(selectedOrder.id_Order, searchTextBox.Text);
+                    }
+                }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
         }
 
 

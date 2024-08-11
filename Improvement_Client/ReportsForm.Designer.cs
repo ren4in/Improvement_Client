@@ -7,6 +7,8 @@
         private ToolStripMenuItem registrationToolStripMenuItem;
         private MenuStrip menuStrip1;
         private DataGridView DataGridReports;
+        private ToolStripTextBox searchTextBox;
+        private ToolStripButton searchButton;
 
         protected override void Dispose(bool disposing)
         {
@@ -19,87 +21,119 @@
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.registrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataGridReports = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridReports)).BeginInit();
-            this.SuspendLayout();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            menuStrip1 = new MenuStrip();
+            usersToolStripMenuItem = new ToolStripMenuItem();
+            registrationToolStripMenuItem = new ToolStripMenuItem();
+            searchTextBox = new ToolStripTextBox();
+            searchButton = new ToolStripButton();
+            DataGridReports = new DataGridView();
+            menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DataGridReports).BeginInit();
+            SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.Blue; // Цвет меню
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.usersToolStripMenuItem,
-            this.registrationToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1778, 40); // Высота меню
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            menuStrip1.BackColor = Color.Blue;
+            menuStrip1.ImageScalingSize = new Size(24, 24);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { usersToolStripMenuItem, registrationToolStripMenuItem,   });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1778, 51);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
             // 
             // usersToolStripMenuItem
             // 
-            this.usersToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 14F); // Увеличение размера шрифта
-            this.usersToolStripMenuItem.ForeColor = System.Drawing.Color.White; // Цвет текста
-            this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
-            this.usersToolStripMenuItem.Size = new System.Drawing.Size(180, 36); // Размер кнопки
-            this.usersToolStripMenuItem.Text = "Пользователи";
-            this.usersToolStripMenuItem.Click += new System.EventHandler(this.usersToolStripMenuItem_Click);
+            usersToolStripMenuItem.Font = new Font("Segoe UI", 14F);
+            usersToolStripMenuItem.ForeColor = Color.White;
+            usersToolStripMenuItem.Name = "usersToolStripMenuItem";
+            usersToolStripMenuItem.Size = new Size(212, 47);
+            usersToolStripMenuItem.Text = "Пользователи";
+            usersToolStripMenuItem.Click += usersToolStripMenuItem_Click;
             // 
             // registrationToolStripMenuItem
-
-            this.registrationToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 14F); // Увеличение размера шрифта
-            this.registrationToolStripMenuItem.ForeColor = System.Drawing.Color.White; // Цвет текста
-            this.registrationToolStripMenuItem.Name = "registrationToolStripMenuItem";
-            this.registrationToolStripMenuItem.Size = new System.Drawing.Size(180, 36); // Размер кнопки
-            this.registrationToolStripMenuItem.Text = "Регистрация";
-            this.registrationToolStripMenuItem.Click += new System.EventHandler(this.registrationToolStripMenuItem_Click);
+            // 
+            registrationToolStripMenuItem.Font = new Font("Segoe UI", 14F);
+            registrationToolStripMenuItem.ForeColor = Color.White;
+            registrationToolStripMenuItem.Name = "registrationToolStripMenuItem";
+            registrationToolStripMenuItem.Size = new Size(192, 47);
+            registrationToolStripMenuItem.Text = "Регистрация";
+            registrationToolStripMenuItem.Click += registrationToolStripMenuItem_Click;
+            // 
+            // searchTextBox
+            // 
+            searchTextBox.Alignment = ToolStripItemAlignment.Right;
+            searchTextBox.Name = "searchTextBox";
+            searchTextBox.Size = new Size(200, 47);
+            searchTextBox.Visible = false;
+            searchTextBox.KeyDown += SearchTextBox_KeyDown;
+            searchTextBox.Click += searchTextBox_Click;
+            // 
+            // searchButton
+            // 
+            searchButton.Alignment = ToolStripItemAlignment.Right;
+            searchButton.BackColor = Color.White;
+            searchButton.Font = new Font("Segoe UI", 14F);
+            searchButton.ForeColor = Color.Black;
+            searchButton.Name = "searchButton";
+            searchButton.Size = new Size(100, 42);
+            searchButton.Text = "Поиск";
+            searchButton.Click += OnSearchButtonClick;
             // 
             // DataGridReports
             // 
-            this.DataGridReports.AllowUserToAddRows = false;
-            this.DataGridReports.AllowUserToDeleteRows = false;
-            this.DataGridReports.AllowUserToResizeRows = false;
-            this.DataGridReports.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGridReports.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DataGridReports.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridReports.Location = new System.Drawing.Point(20, 60); // Позиция и размер DataGridView
-            this.DataGridReports.Name = "DataGridReports";
-            this.DataGridReports.RowHeadersWidth = 62;
-            this.DataGridReports.BackgroundColor = System.Drawing.Color.White; // Цвет фона DataGridView
-            this.DataGridReports.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
-            this.DataGridReports.DefaultCellStyle.BackColor = System.Drawing.Color.Yellow; // Цвет ячеек
-            this.DataGridReports.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12F); // Увеличение размера шрифта в ячейках
-            this.DataGridReports.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold); // Увеличение размера шрифта в заголовках столбцов
-            this.DataGridReports.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                new System.Windows.Forms.DataGridViewButtonColumn(),
-                new System.Windows.Forms.DataGridViewButtonColumn()
-            });
-            this.DataGridReports.Dock = System.Windows.Forms.DockStyle.Fill; // Занимать всё доступное пространство
-            this.DataGridReports.TabIndex = 1;
-            this.DataGridReports.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            this.DataGridReports.ReadOnly = true; // Запрет редактирования ячеек
-            this.DataGridReports.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect; // Выделение всей строки
+            DataGridReports.AllowUserToAddRows = false;
+            DataGridReports.AllowUserToDeleteRows = false;
+            DataGridReports.AllowUserToResizeRows = false;
+            DataGridReports.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DataGridReports.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            DataGridReports.BackgroundColor = Color.White;
+            DataGridReports.CellBorderStyle = DataGridViewCellBorderStyle.SingleVertical;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DataGridReports.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            DataGridReports.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.LightCyan;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 12F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            DataGridReports.DefaultCellStyle = dataGridViewCellStyle2;
+            DataGridReports.Dock = DockStyle.Fill;
+            DataGridReports.Location = new Point(0, 51);
+            DataGridReports.Name = "DataGridReports";
+            DataGridReports.ReadOnly = true;
+            DataGridReports.RowHeadersWidth = 62;
+            DataGridReports.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DataGridReports.Size = new Size(1778, 853);
+            DataGridReports.TabIndex = 1;
+            DataGridReports.CellContentClick += dataGridView1_CellContentClick;
             // 
             // ReportsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1778, 904);
-            this.Controls.Add(this.DataGridReports);
-            this.Controls.Add(this.menuStrip1);
-            this.Name = "ReportsForm";
-            this.Text = "Отчеты";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Resize += new System.EventHandler(this.ReportsForm_Resize); // Обработчик изменения размеров формы
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridReports)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1778, 904);
+            Controls.Add(DataGridReports);
+            Controls.Add(menuStrip1);
+            Name = "ReportsForm";
+            Text = "Отчеты";
+            WindowState = FormWindowState.Maximized;
+            Resize += ReportsForm_Resize;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)DataGridReports).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }

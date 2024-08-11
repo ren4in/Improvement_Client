@@ -6,6 +6,11 @@ namespace Improvement_Client
 {
     public partial class ReportsForm : Form
     {
+
+        User selectedUser;
+        Order selectedOrder;
+        List<Report> allReports = new List<Report>();
+        int mode; // 0  - users, 1 - orders, 2 - reports
         public ReportsForm()
         {
             InitializeComponent();
@@ -14,6 +19,116 @@ namespace Improvement_Client
 
 
         }
+        public ReportsForm(Order order)
+        {
+            InitializeComponent();
+            selectedOrder = order;
+            InitializeDataGridView_Reports();
+            LoadReports(order.id_Order);
+
+
+        }
+        private void InitializeDataGridView_Reports()
+        {
+
+            DataGridReports.CellFormatting -= DataGridReports_CellFormattingSupervisor;
+
+            DataGridReports.DataSource = null;
+
+            DataGridReports.Columns.Clear();
+            DataGridReports.Rows.Clear();
+
+
+            //DataGridReports.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+
+            DataGridReports.AutoGenerateColumns = false;
+
+            // Создаем и добавляем столбцы с настраиваемыми заголовками
+            DataGridViewTextBoxColumn idColumn = new DataGridViewTextBoxColumn();
+
+
+
+            idColumn.Name = "idColiumn";
+            idColumn.HeaderText = "Номер отчета";
+            idColumn.DataPropertyName = "id_Report";
+            DataGridReports.Columns.Add(idColumn);
+
+
+            DataGridViewTextBoxColumn headerColumn = new DataGridViewTextBoxColumn();
+
+
+
+            headerColumn.Name = "HeaderColumn";
+            headerColumn.HeaderText = "Заголовок";
+            headerColumn.DataPropertyName = "Header";
+
+            DataGridReports.Columns.Add(headerColumn);
+
+
+
+            DataGridViewTextBoxColumn dateOfWritingColumn = new DataGridViewTextBoxColumn();
+
+
+
+            dateOfWritingColumn.Name = "DateOfWritingColumn";
+            dateOfWritingColumn.HeaderText = "Дата написания";
+            dateOfWritingColumn.DataPropertyName = "Date_of_Writing";
+
+            DataGridReports.Columns.Add(dateOfWritingColumn);
+
+            DataGridViewTextBoxColumn TextColumn = new DataGridViewTextBoxColumn();
+
+
+
+            TextColumn.Name = "TextColumn";
+            TextColumn.HeaderText = "Содержание";
+            TextColumn.DataPropertyName = "Text";
+
+            DataGridReports.Columns.Add(TextColumn);
+
+
+            DataGridViewCheckBoxColumn acceptedColumn = new DataGridViewCheckBoxColumn();
+            acceptedColumn.Name = "AcceptedReportColumn";
+            acceptedColumn.HeaderText = "Принят";
+            acceptedColumn.DataPropertyName = "Accepted"; // Связь с полем данных
+            acceptedColumn.ReadOnly = false;
+            DataGridReports.Columns.Add(acceptedColumn);
+
+            // Добавление первого DataGridViewButtonColumn
+            DataGridViewButtonColumn buttonColumn1 = new DataGridViewButtonColumn();
+            buttonColumn1.Name = "EditReportButton";
+            buttonColumn1.HeaderText = "Изменить";
+            buttonColumn1.Text = "Изменить";
+            buttonColumn1.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
+
+            // Добавление второго DataGridViewButtonColumn
+            DataGridViewButtonColumn buttonColumn2 = new DataGridViewButtonColumn();
+            buttonColumn2.Name = "ViewReportButton";
+            buttonColumn2.HeaderText = "Посмотреть";
+            buttonColumn2.Text = "Посмотреть";
+            buttonColumn2.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
+
+
+            DataGridViewButtonColumn buttonColumn3 = new DataGridViewButtonColumn();
+            buttonColumn3.Name = "ImagesButton";
+            buttonColumn3.HeaderText = "Посмотреть фото";
+            buttonColumn3.Text = "Посмотреть фото";
+            buttonColumn3.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
+
+            DataGridReports.Columns.Add(buttonColumn1);
+            DataGridReports.Columns.Add(buttonColumn2);
+            DataGridReports.Columns.Add(buttonColumn3);
+
+
+            // DataGridReports.CellClick += DataGridView1_CellClick;
+            DataGridReports.CellFormatting += DataGridReports_CellFormattingSupervisor;
+
+            CenterDataGrid();
+
+
+        }
+
         public ReportsForm(User _selectedUser)
         {
             InitializeComponent();
@@ -59,10 +174,20 @@ namespace Improvement_Client
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Обработка нажатия на кнопку "Пользователи"
-            InitializeDataGridView_Users();
-            LoadUsers();
-            // Здесь можно добавить код для открытия формы с пользователями или другую нужную логику
-        }
+
+            if (usersToolStripMenuItem.Text == "Пользователи")
+            {
+                InitializeDataGridView_Users();
+                LoadUsers();
+            }
+            else if (usersToolStripMenuItem.Text == "Поручения")
+            {
+                usersToolStripMenuItem.Text = "Пользователи";
+                InitializeDataGridView_Orders();
+                LoadOrders(selectedUser.id_User);
+
+            }
+        }// Здесь можно добавить код для открытия формы с пользователями или другую нужную логику
 
 
         private void InitializeDataGridView_Users()
@@ -310,7 +435,8 @@ namespace Improvement_Client
         private List<Order> allOrders;
         public async void LoadOrders(int? thisUser)
         {
-            HttpResponseMessage response = await   Api.client.GetAsync(Api.APP_PATH + "/api/Orders/user/" + thisUser);
+            mode = 2;
+            HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Orders/user/" + thisUser);
 
             if (response.IsSuccessStatusCode)
             {
@@ -324,92 +450,22 @@ namespace Improvement_Client
                 MessageBox.Show("Ошибка сервера!");
             }
         }
-        private void InitializeDataGridView_Reports()
+        public async void LoadOrders(int? thisUser, string SearchText)
         {
+            mode = 2;
+            HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Orders/search?id_User=" + thisUser + "&searchText=" + SearchText);
 
-            DataGridReports.CellFormatting -= DataGridReports_CellFormattingRole;
-            DataGridReports.DataSource = null;
+            if (response.IsSuccessStatusCode)
+            {
+                var ordersJson = await response.Content.ReadAsStringAsync();
+                allOrders = JsonConvert.DeserializeObject<List<Order>>(ordersJson);
+                DataGridReports.DataSource = allOrders;
 
-            DataGridReports.Columns.Clear();
-            DataGridReports.Rows.Clear();
-
-
-            //DataGridReports.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-
-
-            DataGridReports.AutoGenerateColumns = false;
-
-            // Создаем и добавляем столбцы с настраиваемыми заголовками
-            DataGridViewTextBoxColumn idColumn = new DataGridViewTextBoxColumn();
-
-
-
-            idColumn.Name = "UserFirstName";
-            idColumn.HeaderText = "Имя";
-            idColumn.DataPropertyName = "IdUserNavigation.FirstName";
-            DataGridReports.Columns.Add(idColumn);
-
-
-            DataGridViewTextBoxColumn startDateColumn = new DataGridViewTextBoxColumn();
-
-
-            startDateColumn.Name = "Start_date";
-            startDateColumn.HeaderText = "Дата начала";
-            startDateColumn.DataPropertyName = "Start_Date";
-            DataGridReports.Columns.Add(startDateColumn);
-
-            DataGridViewTextBoxColumn finalDateColumn = new DataGridViewTextBoxColumn();
-
-
-            finalDateColumn.Name = "Final_date";
-            finalDateColumn.HeaderText = "Дата конца";
-            finalDateColumn.DataPropertyName = "Final_Date";
-            DataGridReports.Columns.Add(finalDateColumn);
-
-            DataGridViewTextBoxColumn headerColumn = new DataGridViewTextBoxColumn();
-
-
-            headerColumn.Name = "Header";
-            headerColumn.HeaderText = "Заголовок";
-            headerColumn.DataPropertyName = "Header";
-            DataGridReports.Columns.Add(headerColumn);
-
-            DataGridViewTextBoxColumn textColumn = new DataGridViewTextBoxColumn();
-
-
-            textColumn.Name = "Text";
-            textColumn.HeaderText = "Содержание";
-            textColumn.DataPropertyName = "Text";
-            DataGridReports.Columns.Add(textColumn);
-
-
-            DataGridViewCheckBoxColumn acceptedColumn = new DataGridViewCheckBoxColumn();
-            acceptedColumn.Name = "Accepted";
-            acceptedColumn.HeaderText = "Принят";
-            acceptedColumn.DataPropertyName = "Accepted"; // Связь с полем данных
-            acceptedColumn.ReadOnly = false;
-            DataGridReports.Columns.Add(acceptedColumn);
-
-            // Добавление первого DataGridViewButtonColumn
-            DataGridViewButtonColumn buttonColumn1 = new DataGridViewButtonColumn();
-            buttonColumn1.Name = "J";
-            buttonColumn1.HeaderText = "placeholder";
-            buttonColumn1.Text = "placeholder";
-            buttonColumn1.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
-
-            // Добавление второго DataGridViewButtonColumn
-            DataGridViewButtonColumn buttonColumn2 = new DataGridViewButtonColumn();
-            buttonColumn2.Name = "ShowDate";
-            buttonColumn2.HeaderText = "Show Date";
-            buttonColumn2.Text = "Show Date";
-            buttonColumn2.UseColumnTextForButtonValue = true; // Использовать текст кнопки для всех строк
-
-            DataGridReports.Columns.Add(buttonColumn1);
-            DataGridReports.Columns.Add(buttonColumn2);
-            // DataGridReports.CellClick += DataGridView1_CellClick;
-            DataGridReports.CellFormatting += DataGridReports_CellFormattingUser;
-
-            CenterDataGrid();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка сервера!");
+            }
         }
 
         private void DataGridReports_CellFormattingRole(object sender, DataGridViewCellFormattingEventArgs e)
@@ -457,9 +513,9 @@ namespace Improvement_Client
         private void DataGridReports_CellFormattingUser(object sender, DataGridViewCellFormattingEventArgs e)
         {
 
-            if (e.RowIndex >= 0 && allreports != null && allreports.Count > e.RowIndex)
+            if (e.RowIndex >= 0 && allReports != null && allReports.Count > e.RowIndex)
             {
-                var report = allreports[e.RowIndex];
+                var report = allReports[e.RowIndex];
 
                 if (DataGridReports.Columns[e.ColumnIndex].Name == "UserFirstName")
                 {
@@ -473,9 +529,9 @@ namespace Improvement_Client
         }
 
         private List<User> allusers;
-
         public async void LoadUsers()
         {
+            mode = 1;
 
             HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Users");
 
@@ -491,21 +547,20 @@ namespace Improvement_Client
                 MessageBox.Show("Ошибка сервера!");
             }
 
+
         }
 
-        private List<Report> allreports;
-
-
-        public async void LoadReports(int thisUser)
+        public async void LoadUsers(string searchText)
         {
+            mode = 1;
 
-            HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Reports/user/" + thisUser);
+            HttpResponseMessage response = await Api.client.GetAsync(Api.APP_PATH + "/api/Users/search?searchText=" + searchText);
 
             if (response.IsSuccessStatusCode)
             {
-                var reportsJson = await response.Content.ReadAsStringAsync();
-                allreports = JsonConvert.DeserializeObject<List<Report>>(reportsJson);
-                DataGridReports.DataSource = allreports;
+                var usersJson = await response.Content.ReadAsStringAsync();
+                allusers = JsonConvert.DeserializeObject<List<User>>(usersJson);
+                DataGridReports.DataSource = allusers;
 
             }
             else
@@ -513,10 +568,49 @@ namespace Improvement_Client
                 MessageBox.Show("Ошибка сервера!");
             }
 
+
         }
 
-        User selectedUser;
 
+        public async void LoadReports(int? thisOrder)
+        {
+            mode = 3;
+            HttpResponseMessage response = await
+
+                Api.client.GetAsync(Api.APP_PATH + "/api/Reports/order/" + thisOrder);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var reportsJson = await response.Content.ReadAsStringAsync();
+                allReports = JsonConvert.DeserializeObject<List<Report>>(reportsJson);
+                DataGridReports.DataSource = allReports;
+
+            }
+            else
+            {
+                MessageBox.Show("Ошибка сервера!");
+            }
+        }
+
+        public async void LoadReports(int? thisOrder, string searchText)
+        {
+            mode = 3;
+            HttpResponseMessage response = await
+
+                Api.client.GetAsync(Api.APP_PATH + "/api/Reports/search?id_Order=" + thisOrder + "&searchText=" + searchText);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var reportsJson = await response.Content.ReadAsStringAsync();
+                allReports = JsonConvert.DeserializeObject<List<Report>>(reportsJson);
+                DataGridReports.DataSource = allReports;
+
+            }
+            else
+            {
+                MessageBox.Show("Ошибка сервера!");
+            }
+        }
         private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -552,10 +646,25 @@ namespace Improvement_Client
 
                 }
 
+                else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewButtonColumn && DataGridReports.Columns[e.ColumnIndex].Name == "ViewReportButton")
+                {
+                    Report selectedReport = allReports[e.RowIndex];
+
+                    SupervisorViewReport form = new SupervisorViewReport(selectedReport);
+
+                    form.Show();
+                    this.Hide();
+                    form.FormClosed += (s, args) => this.Close(); // Закрываем текущее окно после закрытия нового окна
+
+
+
+
+
+                }
 
                 else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewButtonColumn && DataGridReports.Columns[e.ColumnIndex].Name == "EditOrderButton")
                 {
-                Order    selectedOrder = allOrders[e.RowIndex];
+                    Order selectedOrder = allOrders[e.RowIndex];
 
                     OrderForm form = new OrderForm(selectedOrder);
 
@@ -594,6 +703,18 @@ namespace Improvement_Client
                             MessageBox.Show("Ошибка при удалении поручения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
+
+
+                }
+                else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewButtonColumn && DataGridReports.Columns[e.ColumnIndex].Name == "ReportsButton")
+                {
+                    usersToolStripMenuItem.Text = "Поручения";
+                    InitializeDataGridView_Reports();
+                    selectedOrder = allOrders[e.RowIndex];
+                    LoadReports((int)selectedOrder.id_Order);
+
+
+
 
 
                 }
@@ -644,6 +765,19 @@ namespace Improvement_Client
                 }
 
 
+                else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && DataGridReports.Columns[e.ColumnIndex].Name == "AcceptedReportColumn")
+                {
+                    var cellAcceptReport = DataGridReports.Rows[e.RowIndex].Cells["AcceptedReportColumn"] as DataGridViewCheckBoxCell;
+                    if (cellAcceptReport != null)
+                    {
+                        bool isChecked = (bool)cellAcceptReport.Value;
+                        Report selectedReport = allReports[e.RowIndex];
+
+                        cellAcceptReport.Value = !isChecked; // Изменяем состояние чекбокса на противоположное
+                        HttpResponseMessage response = await Api.client.PostAsync(Api.APP_PATH + $"/api/Reports/ToggleAccepted/{selectedReport.id_Report}", null);
+
+                    }
+                }
                 else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && DataGridReports.Columns[e.ColumnIndex].Name == "AcceptedOrder")
                 {
                     var cellAcceptOrder = DataGridReports.Rows[e.RowIndex].Cells["AcceptedOrder"] as DataGridViewCheckBoxCell;
@@ -658,23 +792,69 @@ namespace Improvement_Client
                     }
 
 
-                    else if (DataGridReports.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && DataGridReports.Columns[e.ColumnIndex].Name == "AcceptedReport")
-                    {
-                        var cellAcceptReport = DataGridReports.Rows[e.RowIndex].Cells["Accepted"] as DataGridViewCheckBoxCell;
-                        if (cellAcceptReport != null)
-                        {
-                            bool isChecked = (bool)cellAcceptReport.Value;
-                            Report selectedReport = allreports[e.RowIndex];
 
-                            cellAcceptReport.Value = !isChecked; // Изменяем состояние чекбокса на противоположное
-                            HttpResponseMessage response = await Api.client.PostAsync(Api.APP_PATH + $"/api/Reports/ToggleAccepted/{selectedReport.id_Report}", null);
-
-                        }
-                    }
                 }
             }
+
+        }
+        private void OnSearchButtonClick(object sender, EventArgs e)
+        {
+            searchTextBox.Visible = !searchTextBox.Visible; // Показываем или скрываем текстовое поле
+            if (searchTextBox.Visible)
+            {
+                searchTextBox.Focus(); // Фокус на текстовое поле
+            }
+        }
+
+        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Логика поиска по тексту в searchTextBox.Text
+                if (mode == 1)
+                {
+                    if (searchTextBox.Text == "")
+                    {
+                        LoadUsers();
+                    }
+                    else
+                    {
+                        LoadUsers(searchTextBox.Text);
+                    }
+                }
+                else if (mode == 2)
+                {
+                    if (searchTextBox.Text == "")
+                    {
+                        LoadOrders(selectedUser.id_User);
+                    }
+                    else
+                    {
+                        LoadOrders(selectedUser.id_User, searchTextBox.Text);
+                    }
+                }
+                else if (mode == 3)
+                {
+                    if (searchTextBox.Text == "")
+                    {
+                        LoadReports(selectedOrder.id_Order);
+                    }
+                    else
+                    {
+                        LoadReports(selectedOrder.id_Order, searchTextBox.Text);
+                    }
+                }
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void searchTextBox_Click(object sender, EventArgs e)
+        {
+
         }
     }
-
-
 }
+
+
+
